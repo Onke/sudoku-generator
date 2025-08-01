@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { border-collapse: collapse; margin-top: 1em; }
+        td { width: 30px; height: 30px; text-align: center; border: 1px solid #555; }
+        tr:nth-child(3n) td { border-bottom: 2px solid #000; }
+        td:nth-child(3n) { border-right: 2px solid #000; }
+    </style>
+</head>
+<body>
+    <h1>Sudoku Generator</h1>
+    <button id="generate">Generate Grid</button>
+    <table id="grid"></table>
+    <script src="sudoku.js"></script>
+</body>
+</html>
