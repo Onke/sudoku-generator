@@ -42,6 +42,79 @@ function generateSudoku() {
     return grid;
 }
 
+function isValidPlacement(board, row, col, val) {
+    for (let i = 0; i < 9; i++) {
+        if (board[row][i] === val || board[i][col] === val) return false;
+    }
+    const startRow = Math.floor(row / 3) * 3;
+    const startCol = Math.floor(col / 3) * 3;
+    for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+            if (board[startRow + r][startCol + c] === val) return false;
+        }
+    }
+    return true;
+}
+
+function countSolutions(board) {
+    let count = 0;
+    function solve(pos) {
+        if (count > 1) return; // early exit if more than one solution
+        if (pos === 81) {
+            count++;
+            return;
+        }
+        const row = Math.floor(pos / 9);
+        const col = pos % 9;
+        if (board[row][col] !== 0) {
+            solve(pos + 1);
+            return;
+        }
+        for (let n = 1; n <= 9; n++) {
+            if (isValidPlacement(board, row, col, n)) {
+                board[row][col] = n;
+                solve(pos + 1);
+                board[row][col] = 0;
+            }
+        }
+    }
+    solve(0);
+    return count;
+}
+
+function hasUniqueSolution(board) {
+    return countSolutions(board) === 1;
+}
+
+function generatePuzzle(difficulty) {
+    const full = generateSudoku();
+    const puzzle = full.map(row => row.slice());
+    const ranges = {
+        easy: [40, 45],
+        medium: [32, 39],
+        hard: [28, 31],
+        korean: [22, 27]
+    };
+    const [minClues, maxClues] = ranges[difficulty] || ranges.easy;
+    let clues = Math.floor(Math.random() * (maxClues - minClues + 1)) + minClues;
+    let cellsToRemove = 81 - clues;
+    let attempts = 0;
+    while (cellsToRemove > 0 && attempts < 1000) {
+        attempts++;
+        const r = Math.floor(Math.random() * 9);
+        const c = Math.floor(Math.random() * 9);
+        if (puzzle[r][c] === 0) continue;
+        const backup = puzzle[r][c];
+        puzzle[r][c] = 0;
+        if (!hasUniqueSolution(puzzle.map(row => row.slice()))) {
+            puzzle[r][c] = backup;
+        } else {
+            cellsToRemove--;
+        }
+    }
+    return puzzle;
+}
+
 function render(grid) {
     const table = document.getElementById('grid');
     table.innerHTML = '';
@@ -49,7 +122,7 @@ function render(grid) {
         const tr = document.createElement('tr');
         for (const val of row) {
             const td = document.createElement('td');
-            td.textContent = val;
+            td.textContent = val === 0 ? '' : val;
             tr.appendChild(td);
         }
         table.appendChild(tr);
@@ -58,7 +131,8 @@ function render(grid) {
 
 window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('generate').addEventListener('click', () => {
-        const grid = generateSudoku();
+        const difficulty = document.getElementById('difficulty').value;
+        const grid = generatePuzzle(difficulty);
         render(grid);
     });
 });

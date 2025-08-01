@@ -14,7 +14,14 @@
 </head>
 <body>
     <h1>Sudoku Generator</h1>
-    <button id="generate">Generate Grid</button>
+    <label for="difficulty">Difficulty:</label>
+    <select id="difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+        <option value="korean">Korean (Expert)</option>
+    </select>
+    <button id="generate">Generate Puzzle</button>
     <table id="grid"></table>
     <script src="sudoku.js"></script>
 </body>
