@@ -116,29 +116,104 @@ const generatePuzzle = (difficulty) => {
   return puzzle;
 };
 
+let currentDifficulty = "easy";
+
 const render = (grid) => {
   const table = document.getElementById("grid");
   table.innerHTML = "";
-  for (const row of grid) {
+  grid.forEach((row, rIdx) => {
     const tr = document.createElement("tr");
-    for (const val of row) {
+    row.forEach((val, cIdx) => {
       const td = document.createElement("td");
-      if (val !== 0) {
-        td.textContent = val;
-        td.classList.add("given");
-      } else {
-        td.textContent = "";
-      }
+      td.classList.add("cell");
+      td.dataset.row = rIdx;
+      td.dataset.col = cIdx;
+      setTimeout(() => {
+        if (val !== 0) {
+          td.textContent = val;
+          td.classList.add("given");
+        } else {
+          td.textContent = "";
+        }
+        td.classList.add("fade-in");
+      }, (rIdx * 9 + cIdx) * 30);
+      td.addEventListener("click", () => highlight(rIdx, cIdx));
       tr.appendChild(td);
-    }
+    });
     table.appendChild(tr);
+  });
+};
+
+const highlighted = [];
+const clearHighlight = () => {
+  while (highlighted.length) {
+    highlighted.pop().classList.remove("highlight");
   }
 };
 
+const highlight = (row, col) => {
+  clearHighlight();
+  document.querySelectorAll("td.cell").forEach((cell) => {
+    const r = Number(cell.dataset.row);
+    const c = Number(cell.dataset.col);
+    if (
+      r === row ||
+      c === col ||
+      (Math.floor(r / 3) === Math.floor(row / 3) &&
+        Math.floor(c / 3) === Math.floor(col / 3))
+    ) {
+      cell.classList.add("highlight");
+      highlighted.push(cell);
+    }
+  });
+};
+
+const showModal = () => {
+  document.getElementById("modal").classList.remove("hidden");
+};
+
+const closeModal = () => {
+  document.getElementById("modal").classList.add("hidden");
+};
+
+const generateAndRender = () => {
+  const grid = generatePuzzle(currentDifficulty);
+  render(grid);
+};
+
 window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("generate").addEventListener("click", () => {
-    const difficulty = document.getElementById("difficulty").value;
-    const grid = generatePuzzle(difficulty);
-    render(grid);
+  const dropdown = document.getElementById("difficulty");
+  const selected = dropdown.querySelector(".selected");
+  const options = dropdown.querySelector(".options");
+  dropdown.addEventListener("click", () => {
+    dropdown.classList.toggle("open");
+  });
+  options.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const option = e.target.closest(".option");
+    if (!option) return;
+    currentDifficulty = option.dataset.value;
+    selected.textContent = option.textContent;
+    dropdown.classList.remove("open");
+    if (currentDifficulty === "korean") {
+      showModal();
+    }
+  });
+  document.getElementById("close-modal").addEventListener("click", closeModal);
+
+  document.getElementById("generate").addEventListener("click", generateAndRender);
+
+  const themes = ["neon", "retro", "light"];
+  let themeIndex = 0;
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    themeIndex = (themeIndex + 1) % themes.length;
+    document.body.setAttribute("data-theme", themes[themeIndex]);
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.key.toLowerCase() === "g") {
+      e.preventDefault();
+      generateAndRender();
+    }
   });
 });
