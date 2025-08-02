@@ -122,7 +122,12 @@ function render(grid) {
         const tr = document.createElement('tr');
         for (const val of row) {
             const td = document.createElement('td');
-            td.textContent = val === 0 ? '' : val;
+            if (val !== 0) {
+                td.textContent = val;
+                td.classList.add('given');
+            } else {
+                td.textContent = '';
+            }
             tr.appendChild(td);
         }
         table.appendChild(tr);
