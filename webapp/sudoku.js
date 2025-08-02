@@ -189,6 +189,7 @@ window.addEventListener("DOMContentLoaded", () => {
     dropdown.classList.toggle("open");
   });
   options.addEventListener("click", (e) => {
+    e.stopPropagation();
     const option = e.target.closest(".option");
     if (!option) return;
     currentDifficulty = option.dataset.value;
