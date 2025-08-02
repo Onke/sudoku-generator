@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sudoku Generator</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <h1>Sudoku Generator</h1>
-    <label for="difficulty">Difficulty:</label>
-    <select id="difficulty">
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">Hard</option>
-        <option value="korean">Korean (Expert)</option>
-    </select>
+    <div class="difficulty-container">
+      <label for="difficulty">Difficulty:</label>
+      <select id="difficulty" class="select">
+        <option value="easy" class="option">Easy</option>
+        <option value="medium" class="option">Medium</option>
+        <option value="hard" class="option">Hard</option>
+        <option value="korean" class="option">Korean (Expert)</option>
+      </select>
+    </div>
     <button id="generate">Generate Puzzle</button>
     <table id="grid"></table>
     <script src="sudoku.js"></script>
-</body>
+  </body>
 </html>
