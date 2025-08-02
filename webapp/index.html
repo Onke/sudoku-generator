@@ -5,20 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sudoku Generator</title>
     <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
   </head>
-  <body>
-    <h1>Sudoku Generator</h1>
+  <body data-theme="neon">
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🎨</button>
+    <h1 class="title">Sudoku Generator</h1>
     <div class="difficulty-container">
-      <label for="difficulty">Difficulty:</label>
-      <select id="difficulty" class="select">
-        <option value="easy" class="option">Easy</option>
-        <option value="medium" class="option">Medium</option>
-        <option value="hard" class="option">Hard</option>
-        <option value="korean" class="option">Korean (Expert)</option>
-      </select>
+      <div id="difficulty" class="dropdown" tabindex="0" aria-label="Difficulty selector">
+        <div class="selected">🟢 Easy</div>
+        <ul class="options">
+          <li class="option" data-value="easy">🟢 Easy</li>
+          <li class="option" data-value="medium">🟡 Medium</li>
+          <li class="option" data-value="hard">🔴 Hard</li>
+          <li class="option" data-value="korean">🧠 Korean</li>
+        </ul>
+      </div>
     </div>
-    <button id="generate">Generate Puzzle</button>
+    <button id="generate" class="button">Generate Puzzle</button>
     <table id="grid"></table>
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-content">
+        <p>Warning: May cause existential crisis.</p>
+        <button id="close-modal" class="button">OK</button>
+      </div>
+    </div>
     <script src="sudoku.js"></script>
   </body>
 </html>
